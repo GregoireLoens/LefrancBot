@@ -5,10 +5,13 @@ client = discord.Client()
 
 @client.event
 async def on_message(message):
+
     if(message.content == '!weekly'):
         #create adding once a month point func check role si admin donne a tout le monde
         #check pay date to ensure no multiple pay
         #7500 comissaire, 2500 garde, 2500 sommelier, 15000 tcheka
+    elif(message.content == '!ping'):
+        await message.channel.send('pong')
     elif(message.content == '!points'):
         #show points of the user
     elif(message.content == '!register'):
@@ -24,3 +27,5 @@ async def on_message(message):
         #montre lhelp
     else:
         await message.channel.send("Désolé mais la commande demandé n'est pas disponible vous pouvez faire !help pour voir la liste des commandes")
+
+client.run(os.getenv["DTOKEN"])
