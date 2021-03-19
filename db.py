@@ -1,7 +1,7 @@
 import sqlite3
 
 def connect_db():
-    con = sqlite3.connect('franc.db')
+    con = sqlite3.connect('../db/franc.db')
     cur = con.cursor()
     return cur
 
