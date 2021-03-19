@@ -1,17 +1,23 @@
 import discord
 import os
+from db import connect_db
+from bet import create_bet
 
 client = discord.Client()
+cur = connect_db()
 
 @client.event
 async def on_message(message):
-
-    #if(message.content == '!weekly'):
+    content = message.content.split("/")
+    print(content[0])
+    if content[0] == '!ping':
+        await message.channel.send('pong')
+    elif '!createbet' in content[0]:
+        await message.channel.send(create_bet(cur, content[1], [content[2], content[3]]))
+    #elif(message.content == '!weekly'):
         #create adding once a month point func check role si admin donne a tout le monde
         #check pay date to ensure no multiple pay
         #7500 comissaire, 2500 garde, 2500 sommelier, 15000 tcheka
-    if(message.content == '!ping'):
-        await message.channel.send('pong')
     #elif(message.content == '!points'):
         #show points of the user
     #elif(message.content == '!register'):
