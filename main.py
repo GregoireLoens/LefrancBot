@@ -28,4 +28,4 @@ async def on_message(message):
     #else:
     #    await message.channel.send("Désolé mais la commande demandé n'est pas disponible vous pouvez faire !help pour voir la liste des commandes")
 
-client.run(os.getenv["DTOKEN"])
+client.run(os.getenv("DTOKEN"))
