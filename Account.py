@@ -17,9 +17,16 @@ class Account():
             self._balance = 0
 
     def balance(self) -> int:
+        """
+            Returns the current account balance
+        """
         self._balance
 
     def register(self):
+        """
+            Register the account in the database.
+            If the account is already registered, do nothing.
+        """
         if self._registered:
             # Already registered
             return
@@ -33,6 +40,10 @@ class Account():
         self._registered = True
 
     def update_balance(self, ammount: int):
+        """
+            Update the account balance.
+            Param MUST be a positive or negative integer.
+        """
         self.balance += ammount
         try:
             self._cursor.execute(
