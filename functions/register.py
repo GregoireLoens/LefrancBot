@@ -24,8 +24,8 @@ class Function():
         if not line:
             raise ArgumentError("L'argument 'nom' est manquant.")
 
-        comp = re.compile('((?<![\\])[\'"])((?:.(?!(?<![\\])\1))*.?)\1')
-        names = comp.findall(line)
+        names = re.findall(r"((?<![\\])['\"])((?:.(?!(?<![\\])\1))*.?)\1", line)
+        names = list(map(lambda x: x[1], names))
         names = list(filter(lambda x: x, names))
         if not names:
             raise ArgumentError("Merci de fournir un nom correctement formaté.")
@@ -40,4 +40,5 @@ class Function():
             # Get the role of the member
             # Create Account object and register it
             pass
+        return str(names)
         return "Cette fonction n'est pas encore implémentée"
