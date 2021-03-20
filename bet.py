@@ -1,39 +1,35 @@
 import sqlite3
+from Gambler import gambler
 
-def create_bet(cur, desc, answers):
-    try:
-        cur.execute("INSERT INTO paris ('result', 'total', 'ouvert') VALUES (0, 0, 1)")
-    except sqlite3.Error as er:
-        return "Je n'ai pas réussis à créer votre paris"
-    
-    return "Votre paris: '" + desc + "' est validé,\nles réponses possibles: 1 => " + answers[0] + ", 2 =>  " + answers[1] + "\nPour parier utilisez l'id: " + str(cur.lastrowid)
+class Bet():
 
-def close_bet(cur, id):
-    try:
-        cur.execute("UPDATE paris set ouvert=0 where id=" + id)
-    except sqlite3.Error as er:
-        return "Je n'ai pas réussis à fermer votre paris"
-    return "le paris numéro: " + str(cur.lastrowid) + " est fermé" 
+    _table = "bets"
 
-def is_open(cur, id):
-    try:
-        cur.execute("SELECT ouvert from paris where id=" + id + ";")
-    except sqlite3.Error as er:
-        return -1
-    is_open = cur.fetchone()
-    if is_open == None:
-        return -1
-    return is_open[0]
-
-def bet(cur, id, choice, amount):
-    check = is_open(cur, id)
-    if check == 1:
+    def __init__(self, id=None):
+        con = sqlite3.connect('../../db/franc.db')
+        self._cursor = con.cursor()
+        self.id = id
+        self._exist = False
+        self._gamblers = []
         try:
-            cur.execute("INSERT INTO parieurs ('choix', 'somme', 'id_paris') VALUES (" +  choice + "," + amount + "," + id + ");")
-        except sqlite3.Error as er:
-            return "Je n'ai pas réussis à prendre en compte votre paris"
-        return "Vous avez parié " + amount + " francs sur le paris numéro " + id
-    elif check == -1:
-        return "Fais pas le con Billy, on te vois"
-    else: 
-        return "Vous ne pouvez plus miser sur ce paris"
+            self._cursor.execute("Select pot, open from ? where id = ?;", self._table, self._id)
+            self._pot = self._cursor.fetchone()[0]
+            self._exist = True
+            self._open = self._cursor.fetchone[1]
+            self._cursor.execute("Select id from gamblers where bet_id = ?;", id)
+            for elem in self._cursor:
+                self._gamblers.append(Gambler(elem[0]))
+        except:
+            self._cursor.execute("INSERT INTO paris ('result', 'total_amount', 'open') VALUES (0, 0, 1)")
+            self._pot = 0
+            self.lastrowid()
+            self._open = True
+            self._gamblers = []
+    
+    def close_bet(self):
+        self._cursor.execute("UPDATE paris set open=0 where id= ?", self.id)
+        self._open = False
+
+    def is_open(self):
+        self._open
+    
