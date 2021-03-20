@@ -21,14 +21,19 @@ def is_open(cur, id):
     except sqlite3.Error as er:
         return -1
     is_open = cur.fetchone()
+    if is_open == None:
+        return -1
     return is_open[0]
 
 def bet(cur, id, choice, amount):
-    if is_open(cur, id) == 1:
+    check = is_open(cur, id)
+    if check == 1:
         try:
             cur.execute("INSERT INTO parieurs ('choix', 'somme', 'id_paris') VALUES (" +  choice + "," + amount + "," + id + ");")
         except sqlite3.Error as er:
             return "Je n'ai pas réussis à prendre en compte votre paris"
         return "Vous avez parié " + amount + " francs sur le paris numéro " + id
+    elif check == -1:
+        return "Fais pas le con Billy, on te vois"
     else: 
         return "Vous ne pouvez plus miser sur ce paris"
