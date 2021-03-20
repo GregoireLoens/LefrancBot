@@ -10,7 +10,7 @@ class Account():
         self._account_id = account_id
         self._registered = False
         try:
-            self._cursor.execute("SELECT francs FROM ? WHERE account_id = ?", self._table, self._account_id)
+            self._cursor.execute("SELECT balance FROM ? WHERE account_id = ?", self._table, self._account_id)
             self._balance = self._cursor.fetchone()[0]
             self._registered = True
         except:
@@ -31,7 +31,7 @@ class Account():
             # Already registered
             return
         self._cursor.execute(
-            "INSERT INTO ? (account_id, francs) VALUES (?, ?)",
+            "INSERT INTO ? (account_id, balance) VALUES (?, ?)",
             self._table,
             self._account_id,
             self._balance
@@ -47,7 +47,7 @@ class Account():
         self.balance += ammount
         try:
             self._cursor.execute(
-                "UPDATE ? SET francs = ? WHERE account_id = ?",
+                "UPDATE ? SET balance = ? WHERE account_id = ?",
                 self._table,
                 self._balance,
                 self._account_id
