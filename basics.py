@@ -1,29 +1,15 @@
 import discord
-import db
+from Account import Account
 
-
-ADMIN_ROLES = [
-    'Président Général',
-    'Commissariat du peuple',
-    'Garde du corps',
-]
 
 #!salary
     # create adding once a month point func check role si admin donne a tout le monde
     # check pay date to ensure no multiple pay
     # 7500 comissaire, 2500 garde, 2500 sommelier, 15000 tcheka
+@admin
 def salary(message):
-    admin = False
-    str = ''
-    for role in (message.author.roles):
-        if role.name in ADMIN_ROLES:
-            admin = True
-            break
-    if admin:
-        str = db.give_points(message)
-    else:
-        str = "You don't have the rights to use this command"
-    return str
+    account = Account(message.author.id)
+
 
 #!points
     # show points of the user
