@@ -1,7 +1,7 @@
 import discord
 import os
 from db import connect_db
-from bet import create_bet, close_bet
+from bet import create_bet, close_bet, bet
 
 client = discord.Client()
 cur = connect_db()
@@ -15,7 +15,8 @@ async def on_message(message):
         await message.channel.send(create_bet(cur, content[1], [content[2], content[3]]))
     elif '!closebet' in content[0]:
         await message.channel.send(close_bet(cur, content[1]))
-    
+    elif '!bet' in content[0]:
+        await message.channel.send(bet(cur, content[1], content[2], content[3]))    
     #elif(message.content == '!weekly'):
         #create adding once a month point func check role si admin donne a tout le monde
         #check pay date to ensure no multiple pay
