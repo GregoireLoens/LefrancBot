@@ -14,6 +14,7 @@ async def on_message(message):
         return
 
     ret = FUNCTION_WRAPPER.call_function(message)
-    await message.channel.send(ret)
+    if ret:
+        await message.channel.send(ret)
 
 client.run(os.getenv("DTOKEN"))

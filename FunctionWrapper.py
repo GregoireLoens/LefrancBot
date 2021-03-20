@@ -33,4 +33,4 @@ class FunctionWrapper():
                     return self._functions[f].run(message, *args)
                 except Exception as e:
                     return str(e)
-        return "Cette commande n'existe pas. Entrez '!help' pour voir la liste des commandes disponibles."
+        return None
