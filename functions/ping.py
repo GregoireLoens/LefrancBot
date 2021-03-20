@@ -1,4 +1,4 @@
-from authorizations import admin
+from toolkit.authorizations import admin
 
 class Function():
 

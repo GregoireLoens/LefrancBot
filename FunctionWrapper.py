@@ -2,6 +2,13 @@ import os
 import importlib
 
 
+class ArgumentError(Exception):
+    """Raised when there is an error in the command arguments"""
+    
+    def __init__(self, msg="Une erreur est présente dans les paramètres de la commande.", *args, **kwargs):
+        super().__init__(msg, *args, **kwargs)
+
+
 class FunctionWrapper():
 
     _functions = {}

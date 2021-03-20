@@ -12,17 +12,23 @@ class Account():
 
     _table = "comptes"
 
-    def __init__(self, account_id: str):
+    def __init__(self, account_id: str, role_id: int = 0):
         con = sqlite3.connect('../../db/franc.db')
         self._cursor = con.cursor()
         self._account_id = account_id
+        self._balance = 0
+        self._role_id = 0
+        self._salary_date = 0
         self._registered = False
         try:
-            self._cursor.execute("SELECT balance FROM ? WHERE account_id = ?", self._table, self._account_id)
-            self._balance = self._cursor.fetchone()[0]
+            self._cursor.execute("SELECT balance, role_id, salary_date FROM ? WHERE account_id = ?", self._table, self._account_id)
+            res = self._cursor.fetchone()
+            self._balance = res[0]
+            self._role_id = res[1]
+            self._salary_date = res[2]
             self._registered = True
         except:
-            self._balance = 0
+            pass
 
     def balance(self) -> int:
         """Returns the current account balance"""
@@ -41,10 +47,12 @@ class Account():
             # Already registered
             return
         self._cursor.execute(
-            "INSERT INTO ? (account_id, balance) VALUES (?, ?)",
+            "INSERT INTO ? VALUES (?, ?, ?, ?)",
             self._table,
             self._account_id,
-            self._balance
+            self._balance,
+            self._salary_date,
+            self._role_id
         )
         self._cursor.commit()
         self._registered = True
