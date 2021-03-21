@@ -37,8 +37,10 @@ class Function():
     def run(message, names: list) -> str:
         for name in names:
             # Get the discord id corresponding to the name
-            # Get the role of the member
-            # Create Account object and register it
+            # Get the role id of the member
+            # account = Account(account_id, role_id)
+            # account.register()
+            # account.update_balance(200)
             pass
         return str(names)
         return "Cette fonction n'est pas encore implémentée"

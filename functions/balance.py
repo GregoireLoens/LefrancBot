@@ -20,5 +20,7 @@ class Function():
     @staticmethod
     def run(message) -> str:
         account = Account(message.author.id)
+        if not account.is_registered:
+            return "Vous semblez ne pas avoir de compte chez nous. Contactez un administrateur pour en ouvrir un !"
         balance = account.balance
         return f"Le solde de votre compte est de {balance}"

@@ -12,7 +12,7 @@ class AccountNotRegistered(Exception):
 
 class Account(Model):
 
-    _table = "comptes"
+    _table = "accounts"
 
     def __init__(self, account_id: int, role_id: int = 0):
         super().__init__(account_id)
