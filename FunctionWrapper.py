@@ -37,7 +37,10 @@ class FunctionWrapper():
             if content.startswith(f):
                 try:
                     args = self._functions[f].parse_args(content[len(f):].strip())
-                    return self._functions[f].run(message, *args)
+                    if f == "!help":
+                        return self._functions[f].run(self._functions, *args)
+                    else:
+                        return self._functions[f].run(message, *args)
                 except Exception as e:
                     return str(e)
         return None
