@@ -1,5 +1,5 @@
 import sqlite3
-from Gambler import gambler
+from models.Gambler import Gambler
 
 class Bet():
 
