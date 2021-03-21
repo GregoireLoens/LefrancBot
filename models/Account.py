@@ -87,3 +87,19 @@ class Account(Model):
         if role.is_registered:
             return Role
         return None
+
+    @property
+    def salary_date(self):
+        return self._salary_date
+
+    def update_salary_date(self, date: int):
+        if not self.is_registered:
+            raise AccountNotRegistered()
+        self._cursor.execute(
+            "UPDATE ? SET salary_date = ? WHERE id = ?",
+            self._table,
+            date,
+            self._id
+        )
+        self._cursor.commit()
+        self._salary_date = date
