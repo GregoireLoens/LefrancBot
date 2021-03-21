@@ -30,4 +30,4 @@ class Function():
                 account.update_balance(role.salary)
                 account.update_month(today.month)
 
-        return "Le salaire a bien été versé.")
+        return "Le salaire a bien été versé."
