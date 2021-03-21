@@ -6,12 +6,12 @@ class Function():
     @staticmethod
     def command() -> str:
         """Returns the command to call the current function."""
-        return "!createbet"
+        return "!closebet"
 
     @staticmethod
     def help() -> str:
         """Returns the help string to send back to the discord."""
-        return """La commande permet de créer un paris.\nUtilisation: !createbet "intitulé du paris" choix 1 choix 2"""
+        return """La commande permet de fermer un ou plusieurs paris.\nUtilisation: !createbet "intitulé du paris" choix 1 choix 2"""
 
     @staticmethod
     def parse_args(line: str) -> list:
@@ -19,7 +19,7 @@ class Function():
             Parse the given arguments.
             The received line is already free of the command and trailing spaces.
         """
-        arg_list = re.findall("^(\".*\")\s(\".*\")\s(\".*\")", line)
+        arg_list = re.findall("^\d", line)
         if not arg_list:
             raise  ArgumentError("Il ya un problème dans votre commandes, vos arguments ne sont pas valides")
         return  arg_list
@@ -34,4 +34,4 @@ class Function():
             The parameters from arg1 to argN are corresponding to the list returned by the 'parse_args' method.
             You can name the parameters as you want.
         """
-        return "sujet :{0}\n-choix 1: {1}\n-choix 2: {2}".format(arg_list[0], arg_list[1], arg_list[2])
+        return "Paris numéro {0} fermé".format(str(arg_list))
