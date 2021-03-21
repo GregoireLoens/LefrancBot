@@ -20,8 +20,8 @@ class Account(Model):
         self._role_id = 0
         self._salary_date = 0
         try:
-            self._cursor.execute("SELECT balance, role_id, salary_date FROM ? WHERE id = ?", self._table, self._id)
-            res = self._cursor.fetchone()
+            self._connection.cursor().execute("SELECT balance, role_id, salary_date FROM ? WHERE id = ?", self._table, self._id)
+            res = self._connection.cursor().fetchone()
             self._balance = res[0]
             self._role_id = res[1]
             self._salary_date = res[2]
@@ -45,15 +45,15 @@ class Account(Model):
         if self.is_registered:
             # Already registered
             return
-        self._cursor.execute(
-            "INSERT INTO ? VALUES (?, ?, ?, ?)",
+        self._connection.cursor().execute(
+            "INSERT INTO ? (id, balance, salary_date, role_id) VALUES (?, ?, ?, ?)",
             self._table,
             self._id,
             self._balance,
             self._salary_date,
             self._role_id
         )
-        self._cursor.commit()
+        self._connection.commit()
         self._registered = True
 
     @property
@@ -70,13 +70,13 @@ class Account(Model):
             raise AccountNotRegistered()
         self._balance += ammount
         try:
-            self._cursor.execute(
+            self._connection.cursor().execute(
                 "UPDATE ? SET balance = ? WHERE id = ?",
                 self._table,
                 self._balance,
                 self._id
             )
-            self._cursor.commit()
+            self._connection.commit()
         except:
             self._balance -= ammount
             raise
@@ -95,11 +95,11 @@ class Account(Model):
     def update_salary_date(self, date: int):
         if not self.is_registered:
             raise AccountNotRegistered()
-        self._cursor.execute(
+        self._connection.cursor().execute(
             "UPDATE ? SET salary_date = ? WHERE id = ?",
             self._table,
             date,
             self._id
         )
-        self._cursor.commit()
+        self._connection.commit()
         self._salary_date = date

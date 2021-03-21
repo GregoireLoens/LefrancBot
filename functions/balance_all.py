@@ -6,21 +6,22 @@ class Function():
     @staticmethod
     def command() -> str:
         """Returns the command to call the current function."""
-        return "!balance"
+        return "!balance_all"
 
     @staticmethod
     def help() -> str:
         """Returns the help string to send back to the discord."""
-        return "La fonction renvoie le solde de votre compte en banque.\nUtilisation: !balance"
+        return "La fonction renvoie le solde de tous les comptes en banque.\nUtilisation: !balance_all"
 
     @staticmethod
     def parse_args(line: str) -> list:
         return []
 
     @staticmethod
+    @admin
     def run(message) -> str:
-        account = Account(message.author.id)
-        if not account.is_registered:
-            return "Vous semblez ne pas avoir de compte chez nous. Contactez un administrateur pour en ouvrir un !"
-        balance = account.balance
-        return f"Le solde de votre compte est de {balance}"
+        balances = ""
+        accounts = Account.get_all()
+        for account in accounts:
+            balances += f"{account.id}: {account.balance}\n"
+        return balances

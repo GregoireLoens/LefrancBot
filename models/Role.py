@@ -14,14 +14,12 @@ class Role(Model):
     _table = "roles"
 
     def __init__(self, role_id: int, salary: int = 0):
-        con = sqlite3.connect('../../db/franc.db')
-        self._cursor = con.cursor()
-        self._id = role_id
+        super().__init__(role_id)
         self._salary = salary
         self._registered = False
         try:
-            self._cursor.execute("SELECT salary FROM ? WHERE id = ?", self._table, self._id)
-            self._salary = self._cursor.fetchone()[0]
+            self._connection.cursor().execute("SELECT salary FROM ? WHERE id = ?", self._table, self._id)
+            self._salary = self._connection.cursor().fetchone()[0]
         except:
             pass
 
@@ -41,13 +39,13 @@ class Role(Model):
         if self._registered:
             # Already registered
             return
-        self._cursor.execute(
-            "INSERT INTO ? VALUES (?, ?)",
+        self._connection.cursor().execute(
+            "INSERT INTO ? (id, salary) VALUES (?, ?)",
             self._table,
             self._id,
             self._salary
         )
-        self._cursor.commit()
+        self._connection.commit()
         self._registered = True
 
     @property
@@ -61,11 +59,11 @@ class Role(Model):
         """
         if not self.is_registered:
             raise RoleNotRegistered(f"Le role avec l'id {self._id} n'existe pas en base.")
-        self._cursor.execute(
+        self._connection.cursor().execute(
                 "UPDATE ? SET salary = ? WHERE id = ?",
                 self._table,
                 self._salary,
                 self._id
             )
-        self._cursor.commit()
+        self._connection.commit()
         self._salary = salary

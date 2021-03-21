@@ -3,7 +3,6 @@
 ADMIN_ROLES = [
     'Président Général',
     'Commissariat du peuple',
-    'Garde du corp',
 ]
 
 class UnsuficientPrivileges(Exception):

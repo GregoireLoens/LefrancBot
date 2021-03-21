@@ -8,7 +8,7 @@ class Model():
     def __init__(self, id):
         self._id = id
         self._registered = False
-        self._cursor = sqlite3.connect('../../db/franc.db').cursor()
+        self._connection = sqlite3.connect('../../db/franc.db')
 
     @property
     def is_registered(self) -> bool:

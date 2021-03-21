@@ -18,7 +18,7 @@ class Function():
         return []
 
     @staticmethod
-    # You could add the @admin decorator here to restrict privileges
+    @admin
     def run(message) -> str:
         for role in message.guild.roles:
             if (role.name == 'Tchéka'):
@@ -30,6 +30,8 @@ class Function():
             elif (role.name == "Garde du corp"):
                 salary = 2500
             elif (role.name == "Peuple Souverain"):
+                salary = 500
+            elif (role.name == "Pauvre"):
                 salary = 500
             else:
                 salary = 0
