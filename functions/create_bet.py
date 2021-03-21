@@ -1,6 +1,5 @@
 import re
 from FunctionWrapper import ArgumentError
-from models.Bet import Bet
 from FunctionWrapper import ArgumentError
 
 class Function():
@@ -36,4 +35,4 @@ class Function():
             The parameters from arg1 to argN are corresponding to the list returned by the 'parse_args' method.
             You can name the parameters as you want.
         """
-        return "La commande est valide"
+        return "sujet :{0}\n-choix 1: {1}\n-choix 2: {2}".format(arg_list[0], arg_list[1], arg_list[2])
