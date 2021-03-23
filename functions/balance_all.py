@@ -23,5 +23,7 @@ class Function():
         balances = ""
         accounts = Account.get_all()
         for account in accounts:
-            balances += f"{account.id}: {account.balance}\n"
+            for member in message.guild.members:
+                if account.id == member.id:
+                    balances += f"{member.display_name}: {account.balance}\n"
         return balances

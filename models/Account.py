@@ -103,3 +103,15 @@ class Account(Model):
         )
         self._connection.commit()
         self._salary_date = date
+
+    def update_role(self, id: int):
+        if not self.is_registered:
+            raise AccountNotRegistered()
+        self._connection.cursor().execute(
+            "UPDATE ? SET role_id = ? WHERE id = ?",
+            self._table,
+            id,
+            self._id
+        )
+        self._connection.commit()
+        self._role_id = id

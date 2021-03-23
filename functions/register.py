@@ -2,6 +2,8 @@ import re
 from toolkit.authorizations import admin
 from FunctionWrapper import ArgumentError
 from models.Account import Account
+from models.Role import Role
+
 
 class Function():
 
@@ -36,11 +38,15 @@ class Function():
     @admin
     def run(message, names: list) -> str:
         for name in names:
-            # Get the discord id corresponding to the name
-            # Get the role id of the member
-            # account = Account(account_id, role_id)
-            # account.register()
-            # account.update_balance(200)
+            tmpid = None
+            salary = 0
+            for member in message.guild.members:
+                if name == member.display_name or name == member.nick or name == member.name:
+                    for role in member.roles:
+                      if Role(role.id).salary() > salary:
+                          tmpid = role.id
+                    account = Account(member.id, tmpid)
+                    account.register()
+                    account.update_balance(200)
             pass
         return str(names)
-        return "Cette fonction n'est pas encore implémentée"
