@@ -41,7 +41,7 @@ class Function():
                 frmId = member.id
             else:
                 pass
-        if (toId == 0 or frmId == 0)
+        if toId == 0 or frmId == 0:
             return f"Un des membres spécifiés dans votre commande n'existe pas"
         frm_acc = Account(frmId)
         if not frm_acc.is_registered:
