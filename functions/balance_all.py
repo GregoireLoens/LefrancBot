@@ -1,5 +1,6 @@
 from toolkit.authorizations import admin
 from models.Account import Account
+from toolkit.discord import display_name_from_id
 
 class Function():
 
@@ -23,7 +24,8 @@ class Function():
         balances = ""
         accounts = Account.get_all()
         for account in accounts:
-            for member in message.guild.members:
-                if account.id == member.id:
-                    balances += f"{member.display_name}: {account.balance}\n"
+            display_name = display_name_from_id(message, account.id)
+            if not display_name:
+                display_name = f"Unknown ({account.id})"
+            balances += f"{display_name}: {account.balance}\n"
         return balances

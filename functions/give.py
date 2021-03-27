@@ -1,7 +1,9 @@
+import re
 from toolkit.authorizations import admin
+from toolkit.discord import id_from_display_name
 from models.Account import Account
 from FunctionWrapper import ArgumentError
-import re
+
 
 class Function():
 
@@ -13,28 +15,30 @@ class Function():
     @staticmethod
     def help() -> str:
         """Returns the help string to send back to the discord."""
-        return "La fonction vous permet de transférer de l'argent à un autre utilisateur.\nUtilisation: !give 'destinataire' 'montant'"
+        return "La fonction vous permet d'imprimer des billets et de les donner à un utilisateur.\nUtilisation: !give 'destinataire' montant"
 
     @staticmethod
     def parse_args(line: str) -> list:
         if not line:
-            raise ArgumentError("L'argument 'nom' est manquant.")
+            raise ArgumentError("Merci de spécifier les arguments de la commande.")
 
-        names = re.findall(r"((?<![\\])['\"])((?:.(?!(?<![\\])\1))*.?)\1", line)
-        names = list(map(lambda x: x[1], names))
-        names = list(filter(lambda x: x, names))
-        if not names:
-            raise ArgumentError("Merci de bien vérifier que vous avez spécifié un montant ainsi qu'un destinataire pour votre don")
-        return [names]
+        match = re.match(r"['\"](?P<user>.+)['\"] (?P<value>\d+)", line)
+        if not match:
+            raise ArgumentError("Merci de bien vérifier que vous avez spécifié un montant ainsi qu'un destinataire pour votre don.")
+        user = match.groupdict()['user']
+        value = int(match.groupdict()['value'])
+        return [user, value]
 
     @staticmethod
     @admin
-    def run(message, to: str, value: int) -> str:
-        for member in message.guild.members:
-            if to == member.display_name or to == member.nick or to == member.name:
-                sec_account = Account(member.id)
-                if not sec_account.is_registered:
-                    return f"La personne à qui vous souhaitez offrir de l'argent n'existe pas dans notre banque."
-                sec_account.update_balance(value)
-                return f"La récompense d'un montant de {value} à bien été fait à {to}"
-        return f"La personne que vous avez spécifié ne semble pas être présente dans notre chère République"
+    def run(message, user: str, value: int) -> str:
+        member_id = id_from_display_name(message, user)
+        if member_id == -1:
+            return f"{user} ne semble pas être présent dans notre chère République"
+
+        account = Account(member_id)
+        if not account.is_registered:
+            return f"{user} n'existe pas dans notre banque."
+
+        account.update_balance(abs(value)) # abs() is used to ensure the intended operation is done
+        return f"Le don d'un montant de {value} à bien été transféré à {user}."
