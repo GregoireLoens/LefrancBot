@@ -36,6 +36,12 @@ TABLE: bets
 |      big int     |    int   | big int |  bool  |
 +------------------+----------+---------+--------+
 
+CREATE TABLE bets (
+    id integer primary key autoincrement, 
+    result int, 
+    pot bigint, 
+    open BOOLEAN
+);
 
 TABLE: gamblers
 
@@ -44,3 +50,11 @@ TABLE: gamblers
 +------------------+--------------+------------+----------+----------+
 |      big int     |    big int   |   big int  |    int   |  big int |
 +------------------+--------------+------------+----------+----------+
+
+CREATE TABLE gamblers (
+    id integer primary key autoincrement, 
+    account_id bigint, 
+    bet_id bigint, 
+    choice int,
+    amount bigint
+);
