@@ -33,7 +33,7 @@ class Bet(Model):
     def pot(self):
         return self._pot
 
-    def update_pot(self, bet)
+    def update_pot(self, bet):
         pot = int(self._pot) + bet
         self._pot = str(pot)
         self._connection.cursor().execute("UPDATE bets SET pot=? where id=?", (str(self._id), self._pot))
