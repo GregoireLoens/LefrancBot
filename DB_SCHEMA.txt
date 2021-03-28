@@ -14,7 +14,6 @@ CREATE TABLE accounts (
 );
 
 
-
 TABLE: roles
 
 +-----------------------------+
@@ -27,3 +26,21 @@ CREATE TABLE roles (
     id INTEGER PRIMARY KEY,
     salary INTEGER
 );
+
+
+TABLE: bets
+
++------------------+----------+---------+--------+
+| id (PRIMARY KEY) |  result  |   pot   |  open  |
++------------------+----------+---------+--------+
+|      big int     |    int   | big int |  bool  |
++------------------+----------+---------+--------+
+
+
+TABLE: gamblers
+
++------------------+--------------+------------+----------+----------+
+| id (PRIMARY KEY) |  account_id  |   bet_id   |  choice  |  amount  |
++------------------+--------------+------------+----------+----------+
+|      big int     |    big int   |   big int  |    int   |  big int |
++------------------+--------------+------------+----------+----------+
