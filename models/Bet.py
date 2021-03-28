@@ -28,10 +28,6 @@ class Bet(Model):
     @property
     def open(self):
         return self._open
-    
-    @property
-    def id(self):
-        return self._id
 
     @property
     def pot(self):
