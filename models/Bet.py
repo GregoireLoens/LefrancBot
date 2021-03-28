@@ -33,6 +33,11 @@ class Bet(Model):
     def pot(self):
         return self._pot
 
+    def update_pot(self, bet)
+        pot = int(self._pot) + bet
+        self._pot = str(pot)
+        self._connection.cursor().execute("UPDATE bets SET pot=? where id=?", (str(self._id), self._pot))
+
     def register(self):
         self._connection.cursor().execute("INSERT INTO bets (pot, result, open) VALUES (0, 0, 1)")
         self._pot = 0

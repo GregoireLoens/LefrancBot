@@ -45,7 +45,7 @@ class Function():
         else:
             bet.set_result(result)
             gamblers = Gambler.get_all_winner(bet_id, result)
-            win = bet.pot / len(gamblers)
+            win = int(bet.pot) / len(gamblers)
             for elem in gamblers:
                 Account(elem[1]).update_balance(win)
         return "Les résultats du paris {0} sont tombés, {1} francs vont être versés aux gagnants".format(bet_id, win)
