@@ -36,7 +36,7 @@ class Bet(Model):
     def update_pot(self, bet):
         pot = int(self._pot) + bet
         self._pot = str(pot)
-        self._connection.cursor().execute("UPDATE bets SET pot=? where id=?", (str(self._id), self._pot))
+        self._connection.cursor().execute("UPDATE bets SET pot=? where id=?", (self._pot, str(self._id)))
         self._connection.commit()
 
     def register(self):
