@@ -1,6 +1,6 @@
 import sqlite3
 from models.Model import Model
-#from models.Gambler import Gambler
+from models.Gambler import Gambler
 
 class Bet(Model):
 
@@ -49,4 +49,4 @@ class Bet(Model):
         cursor.execute("SELECT * from ?", (self._table,))
         for elem in self._connection.cursor().fetchall():
             all_bet.append(Bet(elem[0]))
-        return all_bet
+        return all_bet        
