@@ -28,6 +28,6 @@ class Function():
             role = account.role
             if role and account.salary_date != today.month:
                 account.update_balance(role.salary)
-                account.update_month(today.month)
+                account.update_salary_date(today.month)
 
         return "Le salaire a bien été versé."
