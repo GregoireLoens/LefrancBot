@@ -36,6 +36,6 @@ class Function():
             You can name the parameters as you want.
         """
         bet = Bet()
-        if not bet.open():
+        if not bet.open:
             return "Votre pari n'a pas pu être crée en base"
         return "Le Pari numéro {0} est créé.\nSujet :{1}\n-> choix 1: {2}\n-> choix 2: {3}".format(bet.id(), subject, f_choice, s_choice)
