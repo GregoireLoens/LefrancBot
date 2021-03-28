@@ -2,6 +2,7 @@ import discord
 import os
 
 from FunctionWrapper import FunctionWrapper
+from config import DISCORD_TOKEN
 
 FUNCTION_WRAPPER = FunctionWrapper()
 
@@ -20,4 +21,4 @@ async def on_message(message):
     if ret:
         await message.channel.send(ret)
 
-client.run(os.getenv("DTOKEN"))
+client.run(DISCORD_TOKEN)

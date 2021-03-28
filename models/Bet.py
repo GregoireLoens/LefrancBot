@@ -1,6 +1,7 @@
 import sqlite3
 from models.Model import Model
 from models.Gambler import Gambler
+from config import SQLITE_DB_PATH
 
 class Bet(Model):
 
@@ -52,7 +53,7 @@ class Bet(Model):
     @staticmethod
     def get_all() -> list:
         all_bet = []
-        cursor = sqlite3.connect('../../db/franc.db').cursor()
+        cursor = sqlite3.connect(SQLITE_DB_PATH).cursor()
         cursor.execute("SELECT * from ?", (self._table,))
         for elem in self._connection.cursor().fetchall():
             all_bet.append(Bet(elem[0]))

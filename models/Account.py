@@ -1,6 +1,7 @@
 import sqlite3
 from models.Model import Model
 from models.Role import Role
+from config import SQLITE_DB_PATH
 
 
 class AccountNotRegistered(Exception):
@@ -36,7 +37,7 @@ class Account(Model):
     @staticmethod
     def get_all() -> list:
         ret = []
-        cursor = sqlite3.connect('../../db/franc.db').cursor()
+        cursor = sqlite3.connect(SQLITE_DB_PATH).cursor()
         for row in cursor.execute("SELECT id FROM accounts"):
             ret.append(Account(row[0]))
         return ret

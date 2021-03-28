@@ -1,5 +1,7 @@
 import sqlite3
 
+from config import SQLITE_DB_PATH
+
 
 class Model():
 
@@ -8,7 +10,7 @@ class Model():
     def __init__(self, id):
         self._id = id
         self._registered = False
-        self._connection = sqlite3.connect('../../db/franc.db')
+        self._connection = sqlite3.connect(SQLITE_DB_PATH)
 
     @property
     def is_registered(self) -> bool:

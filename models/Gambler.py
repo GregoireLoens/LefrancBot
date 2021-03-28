@@ -1,5 +1,6 @@
 import sqlite3
 from models.Model import Model
+from config import SQLITE_DB_PATH
 
 class Gambler(Model):
     _table = "gamblers"
@@ -37,7 +38,7 @@ class Gambler(Model):
 
     @staticmethod
     def get_all_winner(bet_id, result):
-        cursor = sqlite3.connect('../../db/franc.db').cursor()
+        cursor = sqlite3.connect(SQLITE_DB_PATH).cursor()
         cursor.execute("SELECT * from gamblers WHERE bet_id=? AND choice=?", (bet_id, result))
         all_gamblers = cursor.fetchall()
         return all_gamblers
