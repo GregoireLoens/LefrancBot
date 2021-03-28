@@ -21,9 +21,7 @@ class Bet(Model):
             
     
     def close(self):
-        print(self._id)
         self._connection.cursor().execute("UPDATE bets SET open=FALSE where id=?", str(self._id))
-        print("query ok")
         self._open = False
         self._connection.commit()
 

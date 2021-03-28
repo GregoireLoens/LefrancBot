@@ -7,10 +7,10 @@ TABLE: accounts
 +----------------------------------------------------+
 
 CREATE TABLE accounts (
-    id INTEGER PRIMARY KEY,
-    balance INTEGER,
+    id BIGINT PRIMARY KEY,
+    balance BIGINT,
     salary_date INTEGER,
-    role_id INTEGER
+    role_id BIGINT
 );
 
 
@@ -23,8 +23,8 @@ TABLE: roles
 +-----------------------------+
 
 CREATE TABLE roles (
-    id INTEGER PRIMARY KEY,
-    salary INTEGER
+    id BIGINT PRIMARY KEY,
+    salary BIGINT
 );
 
 
