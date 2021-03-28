@@ -24,6 +24,10 @@ class Gambler(Model):
     @property
     def bet_ammount(self):
         return self._bet_amount
+    
+    @property
+    def account_id(self):
+        return self._account_id
 
     def create(self, bet_amount, choice):
         self._connection.cursor().execute("INSERT INTO gamblers (account_id, bet_id, bet_amount, choice) VALUES (?, ?, ?, ?);", (self._account_id, self._bet_id, bet_amount, choice))
@@ -32,5 +36,8 @@ class Gambler(Model):
         self._connection.commit()
 
     @staticmethod
-    def get_all(bet_id):
-        return 0
+    def get_all_winner(bet_id, result):
+        cursor = sqlite3.connect('../../db/franc.db').cursor()
+        cursor.execute("SELECT * from gamblers WHERE bet_id=? AND choice=?", (bet_id, result))
+        all_gamblers = cursor.fetchall()
+        return all_gamblers

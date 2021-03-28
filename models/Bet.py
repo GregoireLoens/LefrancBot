@@ -10,8 +10,8 @@ class Bet(Model):
         super().__init__(id)
         self._exist = False
         try:
-            cur = self._connection.cursor().execute("SELECT pot, open FROM bets WHERE id=?;", str(self._id))
-            self._pot, self._open = cur.fetchone()
+            cur = self._connection.cursor().execute("SELECT pot, open, result FROM bets WHERE id=?;", str(self._id))
+            self._pot, self._open, self._result = cur.fetchone()
         except:
             self._connection.cursor().execute("INSERT INTO bets (pot, result, open) VALUES (0, 0, 1)")
             self._pot = 0
@@ -35,6 +35,10 @@ class Bet(Model):
     def id(self):
         return self._id
 
+    @property
+    def pot(self):
+        return self._pot
+
     def register(self):
         self._connection.cursor().execute("INSERT INTO bets (pot, result, open) VALUES (0, 0, 1)")
         self._pot = 0
@@ -42,6 +46,15 @@ class Bet(Model):
         self._open = True
         self._connection.commit() 
 
+    def have_result(self):
+        if self._result != 0:
+            return True
+        return False
+    
+    def set_result(self, result):
+        self._connection.cursor().execute("UPDATE bets SET result=? where id=?", (result, self._id))
+        self._result = result     
+    
     @staticmethod
     def get_all() -> list:
         all_bet = []
