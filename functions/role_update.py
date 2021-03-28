@@ -32,7 +32,7 @@ class Function():
         names = list(filter(lambda x: x, names))
         if not names:
             raise ArgumentError("Merci de fournir un nom correctement formaté.")
-        return names
+        return [names]
 
 
     @staticmethod
@@ -62,7 +62,7 @@ class Function():
                 continue
 
             for role in member.roles:
-                if Role(role.id).salary() > salary:
+                if Role(role.id).salary >= salary:
                     tmpid = role.id
             if tmpid is None:
                 errors.append((name, f"{name} ne semble pas encore avoir de role au sein de notre chère République."))
