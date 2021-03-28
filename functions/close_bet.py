@@ -23,7 +23,6 @@ class Function():
         arg_list = re.findall("^\d", line)
         if not arg_list:
             raise  ArgumentError("Il ya un problème dans votre commandes, vos arguments ne sont pas valides")
-        print(arg_list)
         return  arg_list
 
     @staticmethod
