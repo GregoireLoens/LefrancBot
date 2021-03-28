@@ -47,7 +47,7 @@ class Bet(Model):
     def set_result(self, result):
         self._connection.cursor().execute("UPDATE bets SET result=? where id=?", (result, self._id))
         self._result = result 
-        self._connection.commit   
+        self._connection.commit()   
     
     @staticmethod
     def get_all() -> list:
