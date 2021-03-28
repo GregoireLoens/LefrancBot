@@ -6,7 +6,10 @@ from FunctionWrapper import FunctionWrapper
 FUNCTION_WRAPPER = FunctionWrapper()
 
 FUNCTION_WRAPPER.load_functions()
-client = discord.Client()
+intents = discord.Intents().default()
+intents.members = True
+client = discord.Client(intents=intents)
+
 
 @client.event
 async def on_message(message):

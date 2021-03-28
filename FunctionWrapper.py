@@ -33,8 +33,9 @@ class FunctionWrapper():
             If not, returns a help message.
         """
         content = message.content.strip()
+        cmd = content.split(' ')
         for f in self._functions.keys():
-            if content.startswith(f):
+            if cmd[0] == f:
                 try:
                     args = self._functions[f].parse_args(content[len(f):].strip())
                     if f == "!help":

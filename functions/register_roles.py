@@ -11,7 +11,7 @@ class Function():
     @staticmethod
     def help() -> str:
         """Returns the help string to send back to the discord."""
-        return "La fonction enregistre les roles en base avec le salaire assoié.\nUtilisation: !register_roles"
+        return "La fonction enregistre les roles en base avec le salaire associé.\nUtilisation: !register_roles"
 
     @staticmethod
     def parse_args(line: str) -> list:

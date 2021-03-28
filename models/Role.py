@@ -18,7 +18,7 @@ class Role(Model):
         self._salary = salary
         self._registered = False
         try:
-            self._connection.cursor().execute("SELECT salary FROM ? WHERE id = ?", self._table, self._id)
+            self._connection.cursor().execute("SELECT salary FROM roles WHERE id = ?", (self._id,))
             self._salary = self._connection.cursor().fetchone()[0]
         except:
             pass
@@ -27,7 +27,7 @@ class Role(Model):
     def get_all() -> list:
         ret = []
         cursor = sqlite3.connect('../../db/franc.db').cursor()
-        for row in cursor.execute("SELECT id FROM ?", Role._table):
+        for row in cursor.execute("SELECT id FROM roles"):
             ret.append(Role(row[0]))
         return ret
 
@@ -39,12 +39,8 @@ class Role(Model):
         if self._registered:
             # Already registered
             return
-        self._connection.cursor().execute(
-            "INSERT INTO ? (id, salary) VALUES (?, ?)",
-            self._table,
-            self._id,
-            self._salary
-        )
+        self._connection.cursor().execute("INSERT INTO roles (id, salary) VALUES (?, ?)", (self._id, self._salary))
+        self._connection.cursor().execute("INSERT INTO roles (id, salary) VALUES (?, ?)", (self._id, self._salary))
         self._connection.commit()
         self._registered = True
 
@@ -60,10 +56,6 @@ class Role(Model):
         if not self.is_registered:
             raise RoleNotRegistered(f"Le role avec l'id {self._id} n'existe pas en base.")
         self._connection.cursor().execute(
-                "UPDATE ? SET salary = ? WHERE id = ?",
-                self._table,
-                self._salary,
-                self._id
-            )
+                "UPDATE roles SET salary = ? WHERE id = ?", (self._salary,self._id))
         self._connection.commit()
         self._salary = salary
