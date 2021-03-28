@@ -1,35 +1,52 @@
 import sqlite3
-from models.Gambler import Gambler
+from models.Model import Model
+#from models.Gambler import Gambler
 
-class Bet():
+class Bet(Model):
 
     _table = "bets"
 
-    def __init__(self, id=None):
-        con = sqlite3.connect('../../db/franc.db')
-        self._cursor = con.cursor()
-        self.id = id
+    def __init__(self, id=0):
+        super().__init__(id)
         self._exist = False
-        self._gamblers = []
         try:
-            self._cursor.execute("Select pot, open from ? where id = ?;", self._table, self._id)
-            self._pot = self._cursor.fetchone()[0]
-            self._exist = True
-            self._open = self._cursor.fetchone[1]
-            self._cursor.execute("Select id from gamblers where bet_id = ?;", id)
-            for elem in self._cursor:
-                self._gamblers.append(Gambler(elem[0]))
+            cur = self._connection.cursor().execute("SELECT pot, open FROM bets WHERE id=?;", str(self._id))
+            self._pot, self._open = cur.fetchone()
         except:
-            self._cursor.execute("INSERT INTO paris ('result', 'total_amount', 'open') VALUES (0, 0, 1)")
+            self._connection.cursor().execute("INSERT INTO bets (pot, result, open) VALUES (0, 0, 1)")
             self._pot = 0
-            self.lastrowid()
+            self._id = self._connection.cursor().lastrowid
             self._open = True
-            self._gamblers = []
+            self._connection.commit()
+            
     
-    def close_bet(self):
-        self._cursor.execute("UPDATE paris set open=0 where id= ?", self.id)
+    def close(self):
+        print(self._id)
+        self._connection.cursor().execute("UPDATE bets SET open=FALSE where id=?", str(self._id))
+        print("query ok")
         self._open = False
+        self._connection.commit()
 
-    def is_open(self):
-        self._open
+    @property
+    def open(self):
+        return self._open
     
+    @property
+    def id(self):
+        return self._id
+
+    def register(self):
+        self._connection.cursor().execute("INSERT INTO bets (pot, result, open) VALUES (0, 0, 1)")
+        self._pot = 0
+        self._id = self._connection.cursor().lastrowid
+        self._open = True
+        self._connection.commit() 
+
+    @staticmethod
+    def get_all() -> list:
+        all_bet = []
+        cursor = sqlite3.connect('../../db/franc.db').cursor()
+        cursor.execute("SELECT * from ?", (self._table,))
+        for elem in self._connection.cursor().fetchall():
+            all_bet.append(Bet(elem[0]))
+        return all_bet
