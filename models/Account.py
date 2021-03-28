@@ -14,14 +14,16 @@ class Account(Model):
 
     _table = "accounts"
 
-    def __init__(self, account_id: int, role_id: int = 0):
+    def __init__(self, account_id, role_id: int = 0):
         super().__init__(account_id)
         self._balance = 0
         self._role_id = 0
         self._salary_date = 0
+        cursor = self._connection.cursor()
         try:
-            self._connection.cursor().execute("SELECT balance, role_id, salary_date FROM ? WHERE id = ?", self._table, self._id)
-            res = self._connection.cursor().fetchone()
+            cursor.execute("SELECT balance, role_id, salary_date FROM accounts WHERE id = ?",
+                                              (self._id,))
+            res = cursor.fetchone()
             self._balance = res[0]
             self._role_id = res[1]
             self._salary_date = res[2]
@@ -46,13 +48,8 @@ class Account(Model):
             # Already registered
             return
         self._connection.cursor().execute(
-            "INSERT INTO ? (id, balance, salary_date, role_id) VALUES (?, ?, ?, ?)",
-            self._table,
-            self._id,
-            self._balance,
-            self._salary_date,
-            self._role_id
-        )
+            "INSERT INTO accounts (id, balance, salary_date, role_id) VALUES (?, ?, ?, ?)",
+            (self._id, self._balance, self._salary_date, self._role_id))
         self._connection.commit()
         self._registered = True
 
@@ -71,11 +68,8 @@ class Account(Model):
         self._balance += ammount
         try:
             self._connection.cursor().execute(
-                "UPDATE ? SET balance = ? WHERE id = ?",
-                self._table,
-                self._balance,
-                self._id
-            )
+                "UPDATE accounts SET balance = ? WHERE id = ?",
+                (self._balance, self._id))
             self._connection.commit()
         except:
             self._balance -= ammount
@@ -96,11 +90,8 @@ class Account(Model):
         if not self.is_registered:
             raise AccountNotRegistered()
         self._connection.cursor().execute(
-            "UPDATE ? SET salary_date = ? WHERE id = ?",
-            self._table,
-            date,
-            self._id
-        )
+            "UPDATE accounts SET salary_date = ? WHERE id = ?",
+            (date, self._id))
         self._connection.commit()
         self._salary_date = date
 
@@ -108,10 +99,7 @@ class Account(Model):
         if not self.is_registered:
             raise AccountNotRegistered()
         self._connection.cursor().execute(
-            "UPDATE ? SET role_id = ? WHERE id = ?",
-            self._table,
-            id,
-            self._id
-        )
+            "UPDATE accounts SET role_id = ? WHERE id = ?",
+            (id, self._id))
         self._connection.commit()
         self._role_id = id

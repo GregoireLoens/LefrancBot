@@ -62,12 +62,11 @@ class Function():
                 continue
 
             for role in member.roles:
-                if Role(role.id).salary() > salary:
+                if Role(role.id).salary >= salary:
                     tmpid = role.id
             if tmpid is None:
                 errors.append((name, f"{name} ne semble pas encore avoir de role au sein de notre chère République."))
                 continue
-
             account = Account(member.id, tmpid)
             account.register()
             account.update_balance(200)
