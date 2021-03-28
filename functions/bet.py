@@ -44,7 +44,7 @@ class Function():
                 return "Vous avez déjà misé sur ce pari"
             else:
                 account = Account(message.author.id)
-                account.update_balance(amount * (-1))
+                account.update_balance(int(amount) * (-1))
                 gambler.create(amount, choice)   
                 return "Vous avez parié {0} francs sur le Pari numéro {1}, bonne chance !".format(amount, bet_id)
         else:
