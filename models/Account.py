@@ -17,12 +17,14 @@ class Account(Model):
     def __init__(self, account_id, role_id: int = 0):
         super().__init__(account_id)
         self._balance = 0
-        self._role_id = 0
+        self._role_id = role_id
         self._salary_date = 0
         cursor = self._connection.cursor()
         try:
-            cursor.execute("SELECT balance, role_id, salary_date FROM accounts WHERE id = ?",
-                                              (self._id,))
+            cursor.execute(
+                "SELECT balance, role_id, salary_date FROM accounts WHERE id = ?",
+                (self._id,)
+            )
             res = cursor.fetchone()
             self._balance = res[0]
             self._role_id = res[1]
@@ -35,7 +37,7 @@ class Account(Model):
     def get_all() -> list:
         ret = []
         cursor = sqlite3.connect('../../db/franc.db').cursor()
-        for row in cursor.execute("SELECT id FROM ?", Account._table):
+        for row in cursor.execute("SELECT id FROM accounts"):
             ret.append(Account(row[0]))
         return ret
 
@@ -49,14 +51,15 @@ class Account(Model):
             return
         self._connection.cursor().execute(
             "INSERT INTO accounts (id, balance, salary_date, role_id) VALUES (?, ?, ?, ?)",
-            (self._id, self._balance, self._salary_date, self._role_id))
+            (self._id, self._balance, self._salary_date, self._role_id)
+        )
         self._connection.commit()
         self._registered = True
 
     @property
     def balance(self) -> int:
         """Returns the current account balance"""
-        self._balance
+        return self._balance
 
     def update_balance(self, ammount: int):
         """
@@ -69,7 +72,8 @@ class Account(Model):
         try:
             self._connection.cursor().execute(
                 "UPDATE accounts SET balance = ? WHERE id = ?",
-                (self._balance, self._id))
+                (self._balance, self._id)
+            )
             self._connection.commit()
         except:
             self._balance -= ammount
@@ -79,7 +83,7 @@ class Account(Model):
     def role(self) -> Role:
         role = Role(self._role_id)
         if role.is_registered:
-            return Role
+            return role
         return None
 
     @property
@@ -91,7 +95,8 @@ class Account(Model):
             raise AccountNotRegistered()
         self._connection.cursor().execute(
             "UPDATE accounts SET salary_date = ? WHERE id = ?",
-            (date, self._id))
+            (date, self._id)
+        )
         self._connection.commit()
         self._salary_date = date
 
@@ -100,6 +105,7 @@ class Account(Model):
             raise AccountNotRegistered()
         self._connection.cursor().execute(
             "UPDATE accounts SET role_id = ? WHERE id = ?",
-            (id, self._id))
+            (id, self._id)
+        )
         self._connection.commit()
         self._role_id = id

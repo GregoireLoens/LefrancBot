@@ -16,7 +16,7 @@ class Model():
         return self._registered
 
     @property
-    def id(self):
+    def id(self) -> int:
         return self._id
 
     def register(self):

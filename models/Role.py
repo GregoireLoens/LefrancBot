@@ -18,8 +18,10 @@ class Role(Model):
         self._salary = salary
         self._registered = False
         try:
-            self._connection.cursor().execute("SELECT salary FROM roles WHERE id = ?", (self._id,))
-            self._salary = self._connection.cursor().fetchone()[0]
+            cur = self._connection.cursor()
+            cur.execute("SELECT salary FROM roles WHERE id = ?", (self._id,))
+            self._salary = cur.fetchone()[0]
+            self._registered = True
         except:
             pass
 
@@ -40,7 +42,6 @@ class Role(Model):
             # Already registered
             return
         self._connection.cursor().execute("INSERT INTO roles (id, salary) VALUES (?, ?)", (self._id, self._salary))
-        self._connection.cursor().execute("INSERT INTO roles (id, salary) VALUES (?, ?)", (self._id, self._salary))
         self._connection.commit()
         self._registered = True
 
@@ -56,6 +57,8 @@ class Role(Model):
         if not self.is_registered:
             raise RoleNotRegistered(f"Le role avec l'id {self._id} n'existe pas en base.")
         self._connection.cursor().execute(
-                "UPDATE roles SET salary = ? WHERE id = ?", (self._salary,self._id))
+            "UPDATE roles SET salary = ? WHERE id = ?",
+            (salary, self._id)
+        )
         self._connection.commit()
         self._salary = salary

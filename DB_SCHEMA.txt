@@ -6,6 +6,14 @@ TABLE: accounts
 |      big int     | big int |     int     | big int |
 +----------------------------------------------------+
 
+CREATE TABLE accounts (
+    id INTEGER PRIMARY KEY,
+    balance INTEGER,
+    salary_date INTEGER,
+    role_id INTEGER
+);
+
+
 
 TABLE: roles
 
@@ -14,3 +22,8 @@ TABLE: roles
 +-----------------------------+
 |      big int     | big int  |
 +-----------------------------+
+
+CREATE TABLE roles (
+    id INTEGER PRIMARY KEY,
+    salary INTEGER
+);
