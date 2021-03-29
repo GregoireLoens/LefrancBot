@@ -1,6 +1,10 @@
 import sqlite3
+from threading import Lock
+from toolkit.db import prevent_concurrent
 from models.Model import Model
 
+# Lock used to prevent conccurent acces to the same table into the database
+_roles_mutex = Lock()
 
 class RoleNotRegistered(Exception):
     """Raised when trying to perform a DB action with a non registered Role."""
@@ -13,6 +17,7 @@ class Role(Model):
 
     _table = "roles"
 
+    @prevent_concurrent(_roles_mutex)
     def __init__(self, role_id: int, salary: int = 0):
         super().__init__(role_id)
         self._salary = salary
@@ -26,6 +31,7 @@ class Role(Model):
             pass
 
     @staticmethod
+    @prevent_concurrent(_roles_mutex)
     def get_all() -> list:
         ret = []
         cursor = sqlite3.connect('../../db/franc.db').cursor()
@@ -33,6 +39,7 @@ class Role(Model):
             ret.append(Role(row[0]))
         return ret
 
+    @prevent_concurrent(_roles_mutex)
     def register(self):
         """
             Register the role in the database.
@@ -49,6 +56,7 @@ class Role(Model):
     def salary(self):
         return self._salary
 
+    @prevent_concurrent(_roles_mutex)
     def update_salary(self, salary: int):
         """
             Update the role salary.

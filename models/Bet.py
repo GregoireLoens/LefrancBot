@@ -1,11 +1,18 @@
 import sqlite3
+from threading import Lock
+from toolkit.db import prevent_concurrent
 from models.Model import Model
 from models.Gambler import Gambler
+
+
+# Lock used to prevent conccurent acces to the same table into the database
+_bets_mutex = Lock()
 
 class Bet(Model):
 
     _table = "bets"
 
+    @prevent_concurrent(_bets_mutex)
     def __init__(self, id=0):
         super().__init__(id)
         self._exist = False
@@ -19,7 +26,7 @@ class Bet(Model):
             self._open = True
             self._connection.commit()
             
-    
+    @prevent_concurrent(_bets_mutex)
     def close(self):
         self._connection.cursor().execute("UPDATE bets SET open=FALSE where id=?", str(self._id))
         self._open = False
@@ -33,6 +40,7 @@ class Bet(Model):
     def pot(self):
         return self._pot
 
+    @prevent_concurrent(_bets_mutex)
     def update_pot(self, bet):
         pot = int(self._pot) + bet
         self._pot = str(pot)
@@ -43,13 +51,15 @@ class Bet(Model):
         if self._result != 0:
             return True
         return False
-    
+
+    @prevent_concurrent(_bets_mutex)
     def set_result(self, result):
         self._connection.cursor().execute("UPDATE bets SET result=? where id=?", (result, self._id))
         self._result = result 
         self._connection.commit()   
     
     @staticmethod
+    @prevent_concurrent(_bets_mutex)
     def get_all() -> list:
         all_bet = []
         cursor = sqlite3.connect('../../db/franc.db').cursor()

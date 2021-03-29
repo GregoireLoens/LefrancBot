@@ -1,7 +1,11 @@
 import sqlite3
+from toolkit.db import prevent_concurrent
+from threading import Lock
 from models.Model import Model
 from models.Role import Role
 
+# Lock used to prevent conccurent acces to the same table into the database
+_accounts_mutex = Lock()
 
 class AccountNotRegistered(Exception):
     """Raised when trying to perform a DB action with a non registered Account."""
@@ -14,6 +18,7 @@ class Account(Model):
 
     _table = "accounts"
 
+    @prevent_concurrent(_accounts_mutex)
     def __init__(self, account_id, role_id: int = 0):
         super().__init__(account_id)
         self._balance = 0
@@ -34,6 +39,7 @@ class Account(Model):
             pass
 
     @staticmethod
+    @prevent_concurrent(_accounts_mutex)
     def get_all() -> list:
         ret = []
         cursor = sqlite3.connect('../../db/franc.db').cursor()
@@ -41,6 +47,7 @@ class Account(Model):
             ret.append(Account(row[0]))
         return ret
 
+    @prevent_concurrent(_accounts_mutex)
     def register(self):
         """
             Register the account in the database.
@@ -61,9 +68,10 @@ class Account(Model):
         """Returns the current account balance"""
         return self._balance
 
+    @prevent_concurrent(_accounts_mutex)
     def update_balance(self, ammount: int):
         """
-            Update the account balance.
+            Update the account balance by adding to the current value.
             Param MUST be a positive or negative integer.
         """
         if not self.is_registered:
@@ -90,6 +98,7 @@ class Account(Model):
     def salary_date(self):
         return self._salary_date
 
+    @prevent_concurrent(_accounts_mutex)
     def update_salary_date(self, date: int):
         if not self.is_registered:
             raise AccountNotRegistered()
@@ -100,6 +109,7 @@ class Account(Model):
         self._connection.commit()
         self._salary_date = date
 
+    @prevent_concurrent(_accounts_mutex)
     def update_role(self, id: int):
         if not self.is_registered:
             raise AccountNotRegistered()
